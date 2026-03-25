@@ -22,7 +22,7 @@ export default function ClientsSection() {
   return (
     <section ref={sectionRef} className="py-16 overflow-hidden border-y border-white/5">
       <div className="mb-8 text-center">
-        <h2 className="reveal text-2xl md:text-3xl font-black tracking-tight text-white">
+        <h2 className="reveal text-4xl md:text-6xl font-black tracking-tight text-white">
           Cartera de <span className="text-[#22c55e]">clientes</span>
         </h2>
       </div>

@@ -1,53 +1,44 @@
 import React from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
-// TODO: Reemplazar con la URL real de Cloudinary de la foto del fundador
-const FOUNDER_PHOTO_URL = null;
+const FOUNDER_PHOTO_URL = 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279458/NEnrique_kksn1x.png';
+const BG_URL = 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279421/Fondo_2_z1f9md.png';
 
 export default function FounderSection() {
   const sectionRef = useScrollReveal();
 
   return (
-    <section ref={sectionRef} className="py-20 px-6 md:px-12 relative overflow-hidden">
-      {/* Fondo con resplandor verde */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-500/5 rounded-full blur-[120px]" />
-      </div>
+    <section ref={sectionRef} className="relative py-24 px-6 md:px-12 overflow-hidden">
+      {/* Fondo triángulo verde */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${BG_URL})` }}
+      />
+      <div className="absolute inset-0 bg-black/60" />
 
-      <div className="max-w-[1400px] mx-auto">
-        {/* Título */}
-        <div className="text-center mb-14">
-          <h2 className="reveal text-4xl md:text-5xl font-black tracking-tight text-white">
-            Acerca de <span className="text-[#22c55e]">GALO</span>
-          </h2>
-        </div>
+      <div className="relative z-10 max-w-[1200px] mx-auto">
 
-        {/* Contenido: foto + bio */}
-        <div className="flex flex-col md:flex-row gap-12 items-center">
-          {/* Foto */}
+        {/* Título centrado */}
+        <h2 className="reveal text-4xl md:text-5xl font-black tracking-tight text-white text-center mb-12">
+          Acerca de <span className="text-[#22c55e]">GALO</span>
+        </h2>
+
+        <div className="flex flex-col md:flex-row gap-10 items-center">
+
+          {/* Foto grande */}
           <div className="reveal-left flex-shrink-0">
-            <div className="relative w-64 h-72 md:w-80 md:h-96">
-              {/* Glow detrás */}
-              <div className="absolute inset-0 bg-green-500/20 rounded-3xl blur-2xl scale-110" />
-              {FOUNDER_PHOTO_URL ? (
-                <img
-                  src={FOUNDER_PHOTO_URL}
-                  alt="Nicolás Enrique"
-                  className="relative w-full h-full object-cover rounded-3xl border border-white/10"
-                />
-              ) : (
-                <div className="relative w-full h-full bg-gradient-to-b from-[#0f2010] to-[#0a0a0a] rounded-3xl border border-white/10 flex items-center justify-center">
-                  <div className="w-24 h-24 rounded-full bg-green-500/20 border border-green-500/30" />
-                </div>
-              )}
-            </div>
+            <img
+              src={FOUNDER_PHOTO_URL}
+              alt="Nicolás Enrique"
+              className="w-64 md:w-[380px] h-auto object-contain"
+            />
           </div>
 
           {/* Bio */}
-          <div className="reveal-right flex-1 max-w-2xl">
+          <div className="reveal-right flex-1">
             <p className="text-[#eab308] font-bold tracking-[0.2em] uppercase text-xs mb-2">FUNDADOR</p>
-            <h3 className="text-4xl md:text-5xl font-black text-white mb-6">Nicolás Enrique</h3>
-            <div className="space-y-4 text-gray-300 text-base leading-relaxed">
+            <h3 className="text-3xl md:text-4xl font-black text-white mb-6">Nicolás Enrique</h3>
+            <div className="space-y-4 text-gray-300 text-sm leading-relaxed text-justify">
               <p>
                 Licenciado en Comercialización con 8 años de experiencia en el apasionante
                 mundo del marketing.
@@ -61,14 +52,17 @@ export default function FounderSection() {
                 Tuve el honor de ser parte del equipo ganador del programa Naves 2017, lo que
                 fortaleció mi capacidad para desarrollar proyectos innovadores y estratégicos.
                 Además, fui responsable de establecer y liderar el área de marketing en una
-                importante empresa industrial de Misiones.
+                importante empresa industrial de Misiones, un desafío que consolidó mi expertise
+                en gestión y comunicación.
               </p>
               <p>
                 Hoy, como fundador de "Galo Marketing", fusiono creatividad, visión estratégica y
-                pasión por ayudar a las marcas a alcanzar su máximo potencial.
+                pasión por ayudar a las marcas a alcanzar su máximo potencial. Soy un soñador
+                comprometido con la excelencia, siempre buscando soluciones que marquen la diferencia.
               </p>
             </div>
           </div>
+
         </div>
       </div>
     </section>

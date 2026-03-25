@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
 // ─── Constantes del motor ──────────────────────────────────────────────────────
-// 20 000 unidades = 6 snap points (0, 0.2, 0.4, 0.6, 0.8, 1.0) × 600vh
-const TOTAL_JOURNEY = 20000;
+// 12 000 unidades = vuelo frontal a través de los 3 slides × 400vh
+const TOTAL_JOURNEY = 12000;
 
-// Punto donde la cámara "aterriza" en la sección de servicios y comienza el deslizamiento horizontal
 const SERVICES_ANCHOR_Z = 12000;
 
 // Factor LERP: controla la suavidad del movimiento de cámara (menor = más suave)
@@ -161,16 +160,9 @@ export function use3DScrollEngine({
       let camZ = 0;
       let camX = 0;
 
-      if (trackProgress < SERVICES_ANCHOR_Z) {
-        // Fase 1: Vuelo frontal en Z hacia la sección de servicios
-        camZ = trackProgress;
-        camX = 0;
-      } else {
-        // Fase 2: Deslizamiento horizontal entre servicios y contacto
-        camZ = SERVICES_ANCHOR_Z;
-        const overscroll = trackProgress - SERVICES_ANCHOR_Z; // 0 → 8000
-        camX = (overscroll / 8000) * getHorizontalMax();
-      }
+      // Vuelo frontal en Z a través de los 3 slides
+      camZ = trackProgress;
+      camX = 0;
 
       // ── Actualizar todos los elementos de la escena ─────────────────────────
       updateSlides(camZ, camX);

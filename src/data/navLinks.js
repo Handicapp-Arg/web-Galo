@@ -14,10 +14,9 @@ export const NAV_LINKS = [
   },
   {
     name: 'Servicios',
-    href: '/#servicios',
-    isPage: false,
-    anchor: 'servicios',
-    activeOn: ['/', '/servicios'],
+    href: '/servicios',
+    isPage: true,
+    activeOn: ['/servicios'],
   },
   {
     name: 'Nosotros',
@@ -36,6 +35,6 @@ export const NAV_LINKS = [
     href: '/#contacto',
     isPage: false,
     anchor: 'contacto',
-    activeOn: ['/'],
+    activeOn: [],               // anchor puro, nunca se marca activo
   },
 ];

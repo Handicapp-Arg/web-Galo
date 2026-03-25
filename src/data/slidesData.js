@@ -9,12 +9,12 @@ export const SLIDES_DATA = [
     subtitle: 'EN GALO MARKETING COMBINAMOS',
     title: 'Creatividad,<br/>Planificación &<br/>Estrategia',
     desc: 'Para transformar ideas en acciones efectivas.',
-    img: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279575/Port_2_ys1lyv.png',
+    img: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280294/Port_3_uqbbxj.png',
   },
   {
     subtitle: 'NUESTRO PROPÓSITO',
     title: 'Hagamos que <br/> las cosas pasen',
     desc: 'Contáctanos y empecemos a crear estrategias que generan impacto.',
-    img: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280294/Port_3_uqbbxj.png',
+    img: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279575/Port_2_ys1lyv.png',
   },
 ];

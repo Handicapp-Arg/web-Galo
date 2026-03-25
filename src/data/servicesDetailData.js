@@ -1,9 +1,5 @@
 /**
  * Datos extendidos de servicios para las páginas de detalle y la grilla.
- * Cada servicio tiene slug, título corto (para la card), título largo (para la página),
- * descripción, introducción, bullets de beneficios e imagen Cloudinary.
- *
- * TODO: Reemplazar los imgUrl con las URLs correctas de Cloudinary cuando estén disponibles.
  */
 export const SERVICES_DETAIL_DATA = [
   {
@@ -15,7 +11,7 @@ export const SERVICES_DETAIL_DATA = [
       'Creamos estrategias personalizadas para impulsar tu negocio, definiendo objetivos claros y acciones concretas.',
     intro: 'Nos enfocamos en que cada plan sea:',
     bullets: ['Plan realista', 'Totalmente medible', 'Resultados efectivos'],
-    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280294/Port_3_uqbbxj.png',
+    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279575/Port_2_ys1lyv.png',
     accent: 'bg-[#22c55e]',
   },
   {
@@ -27,7 +23,7 @@ export const SERVICES_DETAIL_DATA = [
       'Te guiamos en el uso eficiente de plataformas digitales. Desde redes sociales hasta campañas publicitarias online.',
     intro: 'Diseñamos estrategias que:',
     bullets: ['Conectan con tu público', 'Maximizan la visibilidad', 'Generan retorno de inversión'],
-    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279115/Portada_1_1_vyux51.png',
+    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280358/Serv_2_f2ca9c.png',
     accent: 'bg-[#111111]',
   },
   {
@@ -39,7 +35,7 @@ export const SERVICES_DETAIL_DATA = [
       'Potenciamos tu presencia en medios convencionales como radio, televisión y prensa gráfica.',
     intro: 'Te asesoramos en la elección de:',
     bullets: ['Canales más efectivos', 'Mensajes impactantes', 'Cómo conectar con tu público'],
-    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279575/Port_2_ys1lyv.png',
+    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280384/Serv_3_loukid.png',
     accent: 'bg-[#1f2937]',
   },
   {
@@ -51,7 +47,7 @@ export const SERVICES_DETAIL_DATA = [
       'Realizamos estudios detallados del mercado y tu competencia para identificar oportunidades, fortalezas y áreas de mejora.',
     intro: 'Esta información te permitirá:',
     bullets: ['Detectar debilidades y fortalezas', 'Identificar áreas de mejora', 'Mantener ventaja competitiva'],
-    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280294/Port_3_uqbbxj.png',
+    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280430/Serv_4_mwfbmb.png',
     accent: 'bg-white',
   },
   {
@@ -63,7 +59,7 @@ export const SERVICES_DETAIL_DATA = [
       'Te acompañamos en la planificación de eventos y acciones que posicionen tu marca. Además, te asesoramos en la selección de comunicadores y embajadores que conecten de manera auténtica con tu público objetivo.',
     intro: 'Nuestro acompañamiento incluye:',
     bullets: ['Planificación de eventos', 'Posicionamiento de marca', 'Selección de embajadores'],
-    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279115/Portada_1_1_vyux51.png',
+    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280457/Serv_5_yxnqch.png',
     accent: 'bg-[#22c55e]',
   },
   {
@@ -79,7 +75,7 @@ export const SERVICES_DETAIL_DATA = [
       'Optimizada para diferentes dispositivos',
       'Pensada para convertir visitas en resultados',
     ],
-    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774279575/Port_2_ys1lyv.png',
+    imgUrl: 'https://res.cloudinary.com/dh2m9ychv/image/upload/v1774280472/Serv_6_erfq9e.png',
     accent: 'bg-[#0a0a0a]',
   },
 ];

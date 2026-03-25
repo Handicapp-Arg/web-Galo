@@ -10,34 +10,35 @@ function ServiceCard({ service, index }) {
     <div className={`reveal ${delay} group`}>
       <Link
         to={`/servicios/${service.slug}`}
-        className="block bg-[#0d0d0d] border border-white/8 rounded-2xl overflow-hidden hover:border-green-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(34,197,94,0.08)]"
+        className="flex flex-col"
+        style={{
+          clipPath: 'polygon(0 0, 100% 0, 100% 86%, 50% 100%, 0 86%)',
+          backgroundColor: '#d4d4d4',
+          minHeight: '340px',
+        }}
       >
-        {/* Imagen / placeholder */}
-        <div className="h-44 overflow-hidden relative">
+        {/* Imagen */}
+        <div className="h-28 flex items-center justify-center bg-gray-200 px-4 pt-2">
           {service.imgUrl ? (
             <img
               src={service.imgUrl}
               alt={service.cardTitle}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+              className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-700"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#0f2010] to-[#0a0a0a] flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20" />
-            </div>
+            <div className="w-16 h-16 rounded-full bg-green-500/20" />
           )}
-          {/* Overlay degradado */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
         </div>
 
         {/* Contenido */}
-        <div className="p-6 pt-4">
-          <h3 className="text-[#22c55e] font-bold text-base leading-snug mb-3 group-hover:text-green-400 transition-colors">
+        <div className="px-5 pt-3 pb-14 text-center flex-1 flex flex-col items-center justify-between">
+          <h3 className="text-[#166534] font-black text-lg leading-snug mb-3">
             {service.cardTitle}
           </h3>
-          <p className="text-gray-400 text-sm leading-relaxed mb-4">
+          <p className="text-gray-700 text-sm font-medium leading-relaxed mb-5">
             {service.cardDesc}
           </p>
-          <span className="text-[#eab308] text-xs font-bold tracking-wider uppercase hover:text-yellow-300 transition-colors">
+          <span className="text-[#ca8a04] text-sm font-black tracking-widest">
             + info
           </span>
         </div>
@@ -58,13 +59,13 @@ export default function ServicesGrid() {
       <div className="max-w-[1400px] mx-auto">
         {/* Título */}
         <div className="text-center mb-14">
-          <h2 className="reveal text-4xl md:text-5xl font-black tracking-tight text-white">
+          <h2 className="reveal text-4xl md:text-6xl font-black tracking-tight text-white">
             Nuestros <span className="text-[#22c55e]">servicios</span>
           </h2>
         </div>
 
         {/* Grid 3×2 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[900px] mx-auto">
           {SERVICES_DETAIL_DATA.map((service, index) => (
             <ServiceCard key={service.slug} service={service} index={index} />
           ))}

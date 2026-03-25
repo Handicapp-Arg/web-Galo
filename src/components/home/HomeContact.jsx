@@ -3,7 +3,7 @@ import { MapPin, Phone, Mail } from 'lucide-react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 const MAP_EMBED_URL =
-  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.0!2d-55.0!3d-26.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDU0JzAwLjAiUyA1NcKwMDAnMDAuMCJX!5e0!3m2!1ses!2sar!4v1';
+  'https://www.google.com/maps?q=Av+Carlos+Culmey+43+Puerto+Rico+Misiones+Argentina&output=embed';
 
 export default function HomeContact() {
   const sectionRef = useScrollReveal();
@@ -91,52 +91,37 @@ export default function HomeContact() {
               <h4 className="text-[#eab308] font-bold tracking-[0.2em] uppercase text-xs mb-2 relative">CONTACTANOS</h4>
               <h3 className="text-2xl font-black text-white mb-8 relative">Formulario de consultas</h3>
 
-              <form className="relative space-y-0">
-                <div className="grid grid-cols-2 gap-4 mb-0">
-                  <div className="group">
-                    <label className="text-gray-500 text-xs uppercase tracking-widest block mb-1">Email</label>
-                    <input
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-green-500 transition-colors text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-gray-500 text-xs uppercase tracking-widest block mb-1">Apellido</label>
-                    <input
-                      type="text"
-                      placeholder="Tu apellido"
-                      className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-green-500 transition-colors text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-5">
-                  <label className="text-gray-500 text-xs uppercase tracking-widest block mb-1">Nombre y Apellido</label>
+              <form className="relative space-y-5">
+                <div className="grid grid-cols-2 gap-4">
                   <input
                     type="text"
-                    placeholder="Tu nombre completo"
-                    className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-green-500 transition-colors text-sm"
+                    placeholder="Nombre"
+                    className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors text-sm"
                   />
-                </div>
-
-                <div className="mt-5">
-                  <label className="text-gray-500 text-xs uppercase tracking-widest block mb-1">Teléfono</label>
                   <input
-                    type="tel"
-                    placeholder="+54 9 ..."
-                    className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-green-500 transition-colors text-sm"
+                    type="text"
+                    placeholder="Apellido"
+                    className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors text-sm"
                   />
                 </div>
 
-                <div className="mt-5">
-                  <label className="text-gray-500 text-xs uppercase tracking-widest block mb-1">Mensaje</label>
-                  <textarea
-                    rows={3}
-                    placeholder="¿En qué podemos ayudarte?"
-                    className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-green-500 transition-colors text-sm resize-none"
-                  />
-                </div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors text-sm"
+                />
+
+                <input
+                  type="tel"
+                  placeholder="Teléfono"
+                  className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors text-sm"
+                />
+
+                <textarea
+                  rows={3}
+                  placeholder="¿En qué podemos ayudarte?"
+                  className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors text-sm resize-none"
+                />
 
                 <button
                   type="button"

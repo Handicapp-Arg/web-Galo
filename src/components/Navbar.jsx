@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Instagram, Facebook } from 'lucide-react';
 import { NAV_LINKS } from '../data/navLinks';
 
 function GaloLogo() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+    }
+  };
+
   return (
-    <Link to="/" className="flex-shrink-0 flex items-center gap-3">
+    <a href="/" onClick={handleClick} className="flex-shrink-0 flex items-center gap-3">
       <svg width="45" height="40" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 80L0 0H100L50 80Z" stroke="white" strokeWidth="4" fill="transparent" />
         <path d="M20 20L35 50L50 20L65 50L80 20" stroke="white" strokeWidth="4" strokeLinejoin="round" />
@@ -14,40 +27,43 @@ function GaloLogo() {
         GALO{' '}
         <span className="text-[0.65rem] font-light tracking-[0.2em] text-gray-300 mt-1">marketing</span>
       </span>
-    </Link>
+    </a>
   );
 }
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  /**
-   * Determina si un link debe aparecer como "activo" basándose en el path actual.
-   */
   const isActive = (link) => {
+    if (link.activeOn.length === 0) return false;
     return link.activeOn.some(
       (p) => pathname === p || pathname.startsWith(p + '/')
     );
   };
 
-  /**
-   * Para links con anchor (#): si estamos en la home, hace smooth scroll.
-   * Si estamos en otra página, el href apunta a /#anchor y el browser navega.
-   */
+  const scrollToAnchor = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleAnchorClick = (link, e) => {
     if (!link.anchor) return;
+    e.preventDefault();
     if (pathname === '/') {
-      e.preventDefault();
-      const el = document.getElementById(link.anchor);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      // Ya estamos en home: scroll directo
+      scrollToAnchor(link.anchor);
+    } else {
+      // Navegamos a home y luego hacemos scroll
+      navigate('/');
+      setTimeout(() => scrollToAnchor(link.anchor), 120);
     }
-    // Si no estamos en home, el href "/#anchor" navega al home + hash
   };
 
   return (
     <>
-      <nav className="fixed w-full z-50 top-0 py-5 px-4 md:px-12 backdrop-blur-md bg-[#030303]/50 border-b border-white/5 pointer-events-auto">
+      <nav className="fixed w-full z-50 top-0 py-5 px-4 md:px-12 pointer-events-auto" style={{ backgroundColor: '#000000' }}>
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
           <GaloLogo />
 
@@ -61,7 +77,12 @@ export default function Navbar() {
 
               if (link.isPage) {
                 return (
-                  <Link key={link.name} to={link.href} className={className}>
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className={className}
+                    onClick={() => { if (pathname === link.href) window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  >
                     {link.name}
                   </Link>
                 );
@@ -85,7 +106,7 @@ export default function Navbar() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 bg-white/8 rounded-full flex items-center justify-center text-white hover:bg-green-400 hover:text-black transition-all border border-white/10"
+              className="w-9 h-9 bg-white rounded-full flex items-center justify-center text-black hover:bg-green-400 transition-all"
             >
               <Instagram className="w-4 h-4" />
             </a>
@@ -93,7 +114,7 @@ export default function Navbar() {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 bg-white/8 rounded-full flex items-center justify-center text-white hover:bg-green-400 hover:text-black transition-all border border-white/10"
+              className="w-9 h-9 bg-white rounded-full flex items-center justify-center text-black hover:bg-green-400 transition-all"
             >
               <Facebook className="w-4 h-4 fill-current" />
             </a>
@@ -125,7 +146,7 @@ export default function Navbar() {
                     key={link.name}
                     to={link.href}
                     className={className}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => { setMobileMenuOpen(false); if (pathname === link.href) window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   >
                     {link.name}
                   </Link>

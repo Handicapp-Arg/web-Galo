@@ -10,14 +10,11 @@ import Navbar from '../components/Navbar';
 import CustomCursor from '../components/CustomCursor';
 import StarsField from '../components/StarsField';
 import HeroSlides from '../components/HeroSlides';
-import ServicesSection from '../components/ServicesSection';
-import ContactSection from '../components/ContactSection';
 import ScrollIndicator from '../components/ScrollIndicator';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 
 import ClientsSection from '../components/home/ClientsSection';
-import ServicesGrid from '../components/home/ServicesGrid';
 import FounderSection from '../components/home/FounderSection';
 import HomeContact from '../components/home/HomeContact';
 
@@ -50,12 +47,6 @@ export default function HomePage() {
     stars,
   });
 
-  // ── Activar scroll-snap solo en la home ───────────────────────────────────
-  useEffect(() => {
-    document.documentElement.classList.add('with-snap');
-    return () => document.documentElement.classList.remove('with-snap');
-  }, []);
-
   // ── Fade del túnel al entrar en las secciones post-túnel ──────────────────
   useEffect(() => {
     const tunnel = tunnelSceneRef.current;
@@ -63,8 +54,8 @@ export default function HomePage() {
 
     const handleScroll = () => {
       const y = window.scrollY;
-      const fadeStart = window.innerHeight * 5.6;
-      const fadeEnd = window.innerHeight * 6.4;
+      const fadeStart = window.innerHeight * 3.6;
+      const fadeEnd = window.innerHeight * 4.2;
       if (y <= fadeStart) {
         tunnel.style.opacity = '1';
       } else if (y >= fadeEnd) {
@@ -81,24 +72,20 @@ export default function HomePage() {
   return (
     <div className="bg-[#030303] text-white font-sans selection:bg-green-500 selection:text-black cursor-none">
 
-      {/* ── Anchor de scroll para el túnel (600vh) ──────────────────────────── */}
+      {/* ── Anchor de scroll para el túnel (600vh) ──────────────────────────────
+          DEBE estar en el flujo normal (no absolute) para que el documento
+          tenga altura scrollable. El túnel 3D es fixed encima de esto.     */}
       <div
         ref={mainWrapperRef}
-        className="absolute top-0 left-0 w-full z-0 pointer-events-none"
-        style={{ height: '600vh' }}
+        className="w-full pointer-events-none"
+        style={{ height: '400vh' }}
       >
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="h-screen w-full snap-start" />
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-screen w-full" />
         ))}
       </div>
 
       <CustomCursor cursorRef={cursorRef} cursorFollowerRef={cursorFollowerRef} />
-
-      {/* Grano cinematográfico */}
-      <div
-        className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.04]"
-        style={{ backgroundImage: GRAIN_SVG_URL }}
-      />
 
       <Navbar />
 
@@ -112,8 +99,6 @@ export default function HomePage() {
         <div className="absolute inset-0 w-full h-full preserve-3d">
           <StarsField stars={stars} starsRef={starsRef} />
           <HeroSlides slides={SLIDES_DATA} slidesRef={slidesRef} textsRef={textsRef} imgsRef={imgsRef} />
-          <ServicesSection servicesRef={servicesRef} />
-          <ContactSection footerRef={footerRef} />
         </div>
       </div>
 
@@ -124,16 +109,15 @@ export default function HomePage() {
         position: relative + z-index: 20 + fondo opaco = cubre el túnel fijo cuando se hace scroll.
         snap-start: le da al scroll-snap un punto de anclaje al final del túnel.
       */}
+      {/* El anchor ya ocupa 600vh en el flujo — no se necesita marginTop */}
       <div
         id="website"
-        className="relative z-20 bg-[#030303] snap-start"
-        style={{ marginTop: '600vh' }}
+        className="relative z-20 bg-[#030303]"
       >
         {/* Línea de transición sutil */}
         <div className="h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
 
         <ClientsSection />
-        <ServicesGrid />
         <FounderSection />
         <HomeContact />
         <Footer />
