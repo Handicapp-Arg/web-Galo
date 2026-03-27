@@ -21,26 +21,23 @@ export default function HoloSlide({ slide, position, index, cameraZRef }) {
     groupRef.current.visible = visible;
     if (!visible) return;
 
-    // ── Opacidad: entrada larga y suave, salida rápida ──────────────────────
+    // ── Opacidad: invisible de lejos, materializa solo al estar cerca ────────
     let opacity = 1;
-    if (dist < -4) {
-      // Acercándose desde lejos: fade in largo y progresivo (de 40 a 4 unidades)
-      // Curva cuadrática para que sea más suave al principio
-      const t = Math.max(0, Math.min(1, (absDist - 4) / 32));
-      opacity = Math.pow(1 - t, 2); // cuadrática: suave al inicio, acelera al final
+    if (dist < -3) {
+      // Acercándose: curva cúbica para que sea prácticamente invisible
+      // hasta las últimas ~10 unidades de distancia
+      const t = Math.max(0, Math.min(1, (absDist - 3) / 22));
+      opacity = Math.pow(1 - t, 4); // potencia 4: casi nada hasta muy cerca
     } else if (dist > 3) {
-      // Ya pasó: desaparición rápida
       opacity = Math.max(0, 1 - (dist - 3) / 5);
     }
 
-    // ── Escala: empieza pequeño y crece suavemente ──────────────────────────
+    // ── Escala: empieza pequeño, crece al final ─────────────────────────────
     let scale = 1;
-    if (dist < -4) {
-      // Crece progresivamente al acercarse
-      const t = Math.max(0, Math.min(1, (absDist - 4) / 32));
-      scale = 0.4 + (1 - t) * 0.6;
+    if (dist < -3) {
+      const t = Math.max(0, Math.min(1, (absDist - 3) / 22));
+      scale = 0.5 + Math.pow(1 - t, 3) * 0.5;
     } else if (dist > 2) {
-      // Se agranda al pasar de largo (zoom through)
       scale = 1 + dist * 0.06;
     }
 

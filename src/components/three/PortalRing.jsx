@@ -35,11 +35,10 @@ export default function PortalRing({ position, cameraZRef }) {
     const camZ = cameraZRef.current || 0;
     const dist = Math.abs(camZ - position[2]);
 
-    // Activación gradual: empieza a encenderse desde lejos (40 unidades)
-    const activation = Math.max(0, 1 - dist / 40);
-    // Curva cuadrática para que el encendido sea suave
-    const smoothActivation = activation * activation;
-    const glow = 0.05 + smoothActivation * 0.95;
+    // Activación: prácticamente apagado hasta estar cerca (<15 unidades)
+    const activation = Math.max(0, 1 - dist / 25);
+    const smoothActivation = Math.pow(activation, 4);
+    const glow = 0.03 + smoothActivation * 0.97;
 
     // Rotación de anillos
     if (innerRingRef.current) {
