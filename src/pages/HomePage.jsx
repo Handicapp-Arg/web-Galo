@@ -1,67 +1,152 @@
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import { useCustomCursor } from '../hooks/useCustomCursor';
-import { use3DScrollEngine } from '../hooks/use3DScrollEngine';
-
-import { generateStars } from '../data/starsData';
 import { SLIDES_DATA } from '../data/slidesData';
 
 import Navbar from '../components/Navbar';
 import CustomCursor from '../components/CustomCursor';
-import StarsField from '../components/StarsField';
-import HeroSlides from '../components/HeroSlides';
 import ScrollIndicator from '../components/ScrollIndicator';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
+
+import TunnelCanvas from '../components/three/TunnelCanvas';
 
 import ClientsSection from '../components/home/ClientsSection';
 import FounderSection from '../components/home/FounderSection';
 import HomeContact from '../components/home/HomeContact';
 
-const GRAIN_SVG_URL = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
+const SECTION_LABELS = ['Intro', 'Estrategia', 'Propósito', 'Clientes', 'Nosotros', 'Contacto'];
 
 export default function HomePage() {
-  // ── Scroll anchor (600vh = 6 snap points del túnel) ───────────────────────
   const mainWrapperRef = useRef(null);
-  const tunnelSceneRef = useRef(null);
+  const scrollProgressRef = useRef(0);
 
-  // ── Refs de la escena 3D ──────────────────────────────────────────────────
-  const slidesRef = useRef([]);
-  const textsRef = useRef([]);
-  const imgsRef = useRef([]);
-  const starsRef = useRef([]);
-  const servicesRef = useRef(null);
-  const footerRef = useRef(null);
-
-  const stars = useMemo(() => generateStars(60), []);
+  const [tunnelOpacity, setTunnelOpacity] = useState(1);
+  const [scrollIndicatorOpacity, setScrollIndicatorOpacity] = useState(1);
+  const [activeSection, setActiveSection] = useState(0);
+  const [flashLabel, setFlashLabel] = useState(false);
+  const prevSection = useRef(0);
 
   const { cursorRef, cursorFollowerRef } = useCustomCursor();
-  const { scrollIndicatorOpacity } = use3DScrollEngine({
-    mainWrapperRef,
-    slidesRef,
-    textsRef,
-    imgsRef,
-    starsRef,
-    servicesRef,
-    footerRef,
-    stars,
-  });
+
+  // ── Calcular scroll progress del túnel ─────────────────────────────────────
+  useEffect(() => {
+    let rafId;
+
+    const tick = () => {
+      if (mainWrapperRef.current) {
+        const rect = mainWrapperRef.current.getBoundingClientRect();
+        const maxScroll = rect.height - window.innerHeight;
+        const progress = maxScroll > 0
+          ? Math.max(0, Math.min(1, -rect.top / maxScroll))
+          : 0;
+        scrollProgressRef.current = progress;
+
+        // Ocultar indicador de scroll
+        setScrollIndicatorOpacity(progress > 0.01 ? 0 : 1);
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    tick();
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  // ── Scroll guiado: un giro de rueda = siguiente sección ──────────────────
+  useEffect(() => {
+    let locked = false;
+    let fallbackTimeout;
+
+    const getSnapPoints = () => {
+      const vh = window.innerHeight;
+      const points = [0, vh, 2 * vh, 3 * vh];
+      const website = document.getElementById('website');
+      if (website) {
+        Array.from(website.children).forEach(child => {
+          if (child.offsetHeight < 10) return;
+          const top = Math.round(child.getBoundingClientRect().top + window.scrollY);
+          if (top > vh * 4 + 20) points.push(top);
+        });
+      }
+      return points;
+    };
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+      if (locked) return;
+
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const y = window.scrollY;
+      const points = getSnapPoints();
+
+      const target = dir > 0
+        ? points.find(p => p > y + 20)
+        : [...points].reverse().find(p => p < y - 20);
+
+      if (target == null) return;
+
+      locked = true;
+      window.scrollTo({ top: target, behavior: 'smooth' });
+      fallbackTimeout = setTimeout(() => { locked = false; }, 1100);
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      clearTimeout(fallbackTimeout);
+    };
+  }, []);
+
+  // ── Indicador de sección activa ───────────────────────────────────────────
+  useEffect(() => {
+    let flashTimeout;
+
+    const calcSection = () => {
+      const y = window.scrollY;
+      const vh = window.innerHeight;
+      let s = 0;
+
+      if (y < vh * 0.67)       s = 0;
+      else if (y < vh * 2)     s = 1;
+      else if (y < vh * 3.33)  s = 2;
+      else {
+        const website = document.getElementById('website');
+        if (website) {
+          const kids = Array.from(website.children).filter(c => c.offsetHeight > 10);
+          s = 3;
+          for (let i = 0; i < kids.length; i++) {
+            const top = kids[i].getBoundingClientRect().top + y;
+            if (y >= top - vh * 0.3) s = 3 + i;
+          }
+          s = Math.min(s, SECTION_LABELS.length - 1);
+        }
+      }
+
+      if (s !== prevSection.current) {
+        prevSection.current = s;
+        setActiveSection(s);
+        setFlashLabel(true);
+        clearTimeout(flashTimeout);
+        flashTimeout = setTimeout(() => setFlashLabel(false), 1200);
+      }
+    };
+
+    window.addEventListener('scroll', calcSection, { passive: true });
+    return () => { window.removeEventListener('scroll', calcSection); clearTimeout(flashTimeout); };
+  }, []);
 
   // ── Fade del túnel al entrar en las secciones post-túnel ──────────────────
   useEffect(() => {
-    const tunnel = tunnelSceneRef.current;
-    if (!tunnel) return;
-
     const handleScroll = () => {
       const y = window.scrollY;
       const fadeStart = window.innerHeight * 3.6;
       const fadeEnd = window.innerHeight * 4.2;
       if (y <= fadeStart) {
-        tunnel.style.opacity = '1';
+        setTunnelOpacity(1);
       } else if (y >= fadeEnd) {
-        tunnel.style.opacity = '0';
+        setTunnelOpacity(0);
       } else {
-        tunnel.style.opacity = String(1 - (y - fadeStart) / (fadeEnd - fadeStart));
+        setTunnelOpacity(1 - (y - fadeStart) / (fadeEnd - fadeStart));
       }
     };
 
@@ -72,9 +157,7 @@ export default function HomePage() {
   return (
     <div className="bg-[#030303] text-white font-sans selection:bg-green-500 selection:text-black cursor-none">
 
-      {/* ── Anchor de scroll para el túnel (600vh) ──────────────────────────────
-          DEBE estar en el flujo normal (no absolute) para que el documento
-          tenga altura scrollable. El túnel 3D es fixed encima de esto.     */}
+      {/* ── Anchor de scroll para el túnel (400vh) ──────────────────────────────── */}
       <div
         ref={mainWrapperRef}
         className="w-full pointer-events-none"
@@ -86,37 +169,46 @@ export default function HomePage() {
       </div>
 
       <CustomCursor cursorRef={cursorRef} cursorFollowerRef={cursorFollowerRef} />
-
       <Navbar />
 
-      {/* ── Túnel 3D (se desvanece al pasar de 600vh) ───────────────────────── */}
-      <div
-        ref={tunnelSceneRef}
-        id="tunnel-scene"
-        className="fixed inset-0 w-full h-full bg-[#020202] z-10 pointer-events-none"
-        style={{ perspective: '1200px', overflow: 'hidden' }}
-      >
-        <div className="absolute inset-0 w-full h-full preserve-3d">
-          <StarsField stars={stars} starsRef={starsRef} />
-          <HeroSlides slides={SLIDES_DATA} slidesRef={slidesRef} textsRef={textsRef} imgsRef={imgsRef} />
-        </div>
-      </div>
+      {/* ── Escena 3D inmersiva sci-fi (React Three Fiber) ─────────────────────── */}
+      <TunnelCanvas
+        scrollProgressRef={scrollProgressRef}
+        slides={SLIDES_DATA}
+        opacity={tunnelOpacity}
+      />
 
       <ScrollIndicator opacity={scrollIndicatorOpacity} />
 
-      {/* ── Secciones post-túnel (aparecen al pasar 600vh) ──────────────────── */}
-      {/*
-        position: relative + z-index: 20 + fondo opaco = cubre el túnel fijo cuando se hace scroll.
-        snap-start: le da al scroll-snap un punto de anclaje al final del túnel.
-      */}
-      {/* El anchor ya ocupa 600vh en el flujo — no se necesita marginTop */}
+      {/* ── Indicador de sección (dots laterales) ──────────────────────────────── */}
+      <div className="fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-end gap-3 pointer-events-none">
+        <div
+          className="mb-1 text-[10px] font-semibold tracking-[0.2em] uppercase text-green-400 transition-all duration-500"
+          style={{ opacity: flashLabel ? 1 : 0, transform: flashLabel ? 'translateX(0)' : 'translateX(8px)' }}
+        >
+          {SECTION_LABELS[activeSection]}
+        </div>
+
+        {SECTION_LABELS.map((_, i) => (
+          <div
+            key={i}
+            className="rounded-full transition-all duration-400"
+            style={{
+              width:  activeSection === i ? '8px' : '5px',
+              height: activeSection === i ? '8px' : '5px',
+              background: activeSection === i ? '#22c55e' : 'rgba(255,255,255,0.25)',
+              boxShadow: activeSection === i ? '0 0 8px 2px rgba(34,197,94,0.5)' : 'none',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* ── Secciones post-túnel ──────────────────────────────────────────────── */}
       <div
         id="website"
         className="relative z-20 bg-[#030303]"
       >
-        {/* Línea de transición sutil */}
         <div className="h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
-
         <ClientsSection />
         <FounderSection />
         <HomeContact />
